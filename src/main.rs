@@ -1,6 +1,14 @@
-fn main() {
-    let cmd = clap::command!();
-    cmd.get_matches();
-    let img = yukkku_genicon::generate(360);
-    img.save("./result.png").unwrap();
+use clap::Parser;
+use yukkku_genicon::generate;
+
+#[derive(Parser)]
+struct Args {
+    size: u32,
+    file: String,
+}
+
+fn main() -> Result<(), image::ImageError> {
+    let Args { size, file } = Args::parse();
+    let img = generate(size);
+    img.save(file)
 }
