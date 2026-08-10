@@ -12,13 +12,13 @@
         "x86_64-darwin"
         "x86_64-linux"
       ];
-      mkIcongen =
+      mkGenicon =
         pkgs:
         pkgs.rustPlatform.buildRustPackage (finalAtters: {
           pname = "yukkku-genicon";
           version = "0.1.0";
           src = ./.;
-          cargoHash = "sha256-Fay9evORbfoc/lmBtWiMoMURWhp9F9GhLpY+xC4KJdY=";
+          cargoHash = "sha256-8ro1NIial0Ydf+UckADN8qJyMH0s/XyRVd+x6kwtbSc=";
         });
     in
     {
@@ -26,15 +26,15 @@
         system:
         let
           pkgs = import nixpkgs { inherit system; };
-          yukkku-icongen = mkIcongen pkgs;
+          yukkku-genicon = mkGenicon pkgs;
         in
         {
-          inherit yukkku-icongen;
-          default = yukkku-icongen;
+          inherit yukkku-genicon;
+          default = yukkku-genicon;
         }
       );
       overlays.default = final: _prev: {
-        yukkku-icongen = mkIcongen final;
+        yukkku-genicon = mkGenicon final;
       };
 
       devShells = eachSystem (
