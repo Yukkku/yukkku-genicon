@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
   outputs =
     { nixpkgs, ... }:
@@ -9,7 +9,6 @@
       eachSystem = lib.genAttrs [
         "aarch64-darwin"
         "aarch64-linux"
-        "i686-linux"
         "x86_64-darwin"
         "x86_64-linux"
       ];
