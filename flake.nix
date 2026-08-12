@@ -6,12 +6,22 @@
     { nixpkgs, ... }:
     let
       lib = nixpkgs.lib;
-      eachSystem = lib.genAttrs [
-        "aarch64-darwin"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "x86_64-linux"
-      ];
+      eachSystem =
+        f:
+        lib.genAttrs
+          [
+            "aarch64-darwin"
+            "aarch64-linux"
+            "i686-linux"
+            "x86_64-linux"
+          ]
+          (
+            system:
+            let
+              pkgs = import nixpkgs { inherit system; };
+            in
+            f pkgs
+          );
       mkGenicon =
         pkgs:
         pkgs.rustPlatform.buildRustPackage (finalAtters: {
@@ -26,39 +36,26 @@
         });
     in
     {
-      packages = eachSystem (
-        system:
-        let
-          pkgs = import nixpkgs { inherit system; };
-          yukkku-genicon = mkGenicon pkgs;
-        in
-        {
-          inherit yukkku-genicon;
-          default = yukkku-genicon;
-        }
-      );
+      packages = eachSystem (pkgs: rec {
+        yukkku-genicon = mkGenicon pkgs;
+        default = yukkku-genicon;
+      });
       overlays.default = final: _prev: {
         yukkku-genicon = mkGenicon final;
       };
 
-      devShells = eachSystem (
-        system:
-        let
-          pkgs = import nixpkgs { inherit system; };
-        in
-        {
-          default = pkgs.mkShell {
-            name = "rust environment";
-            packages = with pkgs; [
-              cargo
-              rustc
-              rust-analyzer
-              rustfmt
-              nixd
-              nixfmt
-            ];
-          };
-        }
-      );
+      devShells = eachSystem (pkgs: {
+        default = pkgs.mkShell {
+          name = "rust environment";
+          packages = with pkgs; [
+            cargo
+            rustc
+            rust-analyzer
+            rustfmt
+            nixd
+            nixfmt
+          ];
+        };
+      });
     };
 }
