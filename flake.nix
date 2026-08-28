@@ -28,7 +28,7 @@
           pname = "yukkku-genicon";
           version = "0.1.0";
           src = ./.;
-          cargoHash = "sha256-8ro1NIial0Ydf+UckADN8qJyMH0s/XyRVd+x6kwtbSc=";
+          cargoHash = "sha256-Zr2vsmIQGHGhTNoMPqrdHavtA3+LzuJH3Hw5axg5SyU=";
           meta = {
             license = pkgs.lib.licenses.mit;
             homepage = "https://github.com/yukkku/yukkku-genicon";
